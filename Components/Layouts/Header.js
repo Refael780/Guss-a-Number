@@ -18,6 +18,8 @@ const Styles = StyleSheet.create({
     alignItems: 'center'
   },
   txtHeader: {
+    fontFamily: 'open-sans-bold',
+
     fontSize: 26,
     color: 'white'
   }

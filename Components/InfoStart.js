@@ -9,7 +9,7 @@ const InfoStart = props => {
         You Selected The Number:
       </Text>
       <Text style={styles.txt}>{props.number}</Text>
-      <CustomButton>START GAME</CustomButton>
+      <CustomButton {...props}>START GAME</CustomButton>
     </View>
   );
 };

@@ -6,7 +6,8 @@ import {
   TextInput,
   Button,
   TouchableWithoutFeedback,
-  Keyboard
+  Keyboard,
+  Alert
 } from 'react-native';
 import InfoStart from '../Components/InfoStart';
 import color from '../constants/color';
@@ -14,11 +15,13 @@ import Card from '../Components/Layouts/Card';
 import ShowNumber from '../Components/Layouts/ShowNumber';
 import CustomButton from '../Components/Utils/CustomButton';
 import Input from '../Components/Utils/Input';
-
+import TheGame from './TheGame';
+import globalStyle from '../constants/globalStyles';
 const StartGame = props => {
   const [inputNumberText, setInputNumberText] = useState('');
   const [isChoosnumber, SetChoosnumber] = useState(false);
   const [SelectedNumber, SetSelectedNumber] = useState('');
+  const [startGame, setStartGame] = useState(false);
   const inputNumberHandler = text => {
     setInputNumberText(text.replace(/[^0-9]/g, ''));
     SetChoosnumber(false);
@@ -34,6 +37,9 @@ const StartGame = props => {
     const confirmNumber = parseInt(inputNumberText);
 
     if (isNaN(confirmNumber) || confirmNumber <= 0 || confirmNumber > 99) {
+      Alert.alert('Invaild Number', 'The number must between 1-99', [
+        { text: 'Okey', style: 'destructive', onPress: onRestHandler }
+      ]);
       return;
     }
     setInputNumberText('');
@@ -41,18 +47,29 @@ const StartGame = props => {
     SetSelectedNumber(confirmNumber);
     Keyboard.dismiss();
   };
+  const startGameHandler = () => {
+    setStartGame(true);
+  };
+
   const ShowInfo = isChoosnumber ? (
     <ShowNumber>
-      <InfoStart style={styles.info} number={SelectedNumber}></InfoStart>
+      <InfoStart
+        onPress={startGameHandler}
+        style={styles.info}
+        number={SelectedNumber}
+      ></InfoStart>
     </ShowNumber>
   ) : null;
-  return (
+
+  return startGame ? (
+    <TheGame exclude={SelectedNumber} />
+  ) : (
     <TouchableWithoutFeedback onPress={closeKeyboardHandler}>
       <View style={styles.screen}>
         <Text style={styles.txtStyle}>Start a Game</Text>
         <Card>
           <View style={styles.inputContainer}>
-            <Text>Select A Number</Text>
+            <Text style={globalStyle.primaryFont}>Select A Number</Text>
             <Input
               style={styles.input}
               maxLength={2}
@@ -111,8 +128,8 @@ const styles = StyleSheet.create({
 
   txtStyle: {
     fontSize: 24,
-    fontWeight: 'bold',
-    marginVertical: 10
+    marginVertical: 10,
+    fontFamily: 'open-sans-bold'
   },
   btnsLayout: {
     width: '100%',
